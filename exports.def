@@ -1,0 +1,4 @@
+LIBRARY "packer"
+EXPORTS
+	expCreatePlugin
+	expGetInterfaceVersion
