@@ -24,11 +24,12 @@ void packer::validate(const char* filename)
     }
 
     char* buffer = NULL;
-    xml_document<> document;
-    if (loadXml(buffer, &document, profile))
+    xml_document<>* document = pSettings->LoadXml(profile, buffer);
+    if (document != NULL)
     {
-        validate(&document);
+        validate(document);
         delete[] buffer;
+        delete document;
     }
 }
 

@@ -24,11 +24,12 @@ void packer::gear(const char* filename)
     }
 
     char* buffer = NULL;
-    xml_document<> document;
-    if (loadXml(buffer, &document, filename))
+    xml_document<>* document = pSettings->LoadXml(filename, buffer);
+    if (document != NULL)
     {
-        gear(&document);
+        gear(document);
         delete[] buffer;
+        delete document;
     }
     else
     {

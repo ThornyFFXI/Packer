@@ -181,10 +181,12 @@ start "C:\Program Files\Git\git-bash.exe"</Command>
     <ClCompile Include="validate.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\common\Output.h" />
+    <ClInclude Include="..\common\safePacketInjector.h" />
+    <ClInclude Include="..\common\Settings.h" />
+    <ClInclude Include="..\common\thirdparty\rapidxml.hpp" />
     <ClInclude Include="constants.h" />
-    <ClInclude Include="Output.h" />
     <ClInclude Include="Packer.h" />
-    <ClInclude Include="safePacketInjector.h" />
     <ClInclude Include="Structs.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

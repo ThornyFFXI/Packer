@@ -87,7 +87,7 @@ bool packer::processMoves()
         //If we have no space, but still have items in our fetchlist, we try to store an item to make space for them.
         else if (fetchList.size() > 0)
         {
-            bool flexible = (fetchList.begin()->container == -2); //If the first item in fetch list is set for -2, it can go elsewhere and no error is needed yet.
+            bool flexible = (fetchList.begin()->target == -2); //If the first item in fetch list is set for -2, it can go elsewhere and no error is needed yet.
 
             if (tryStore(container, !flexible, iter->canRetrieve))
                 continue;
@@ -434,7 +434,7 @@ bool packer::tryStore(int container, bool force, bool canRetrieve)
     if (storeIndex == -1)
         return false;
 
-    //Start by trying to put the item in it's destination, since it'll save us a movement later.
+    //Try to move the item.
     itemSlotInfo_t* item = &mGear.items[x][storeIndex];
     if (moveItem(x, storeIndex, storeCount, storeContainer, item->resource, force ? "Store" : "Compress"))
         return true;

@@ -46,7 +46,8 @@ bool packer::Initialize(IAshitaCore* core, ILogManager* logger, const uint32_t i
         return false;
     }
 
-    pOutput = new OutputHelpers(core, logger, "Packer");
+    pOutput   = new OutputHelpers(core, logger, this->GetName());
+    pSettings = new SettingsHelper(core, pOutput, this->GetName());
     pPacket   = new safePacketInjector(core->GetPacketManager());
     pInv      = m_AshitaCore->GetMemoryManager()->GetInventory();
 
@@ -62,8 +63,9 @@ bool packer::Initialize(IAshitaCore* core, ILogManager* logger, const uint32_t i
 }
 void packer::Release(void)
 {
-    delete pOutput;
     delete pPacket;
+    delete pSettings;
+    delete pOutput;
 }
 bool packer::HandleCommand(int32_t mode, const char* command, bool injected)
 {

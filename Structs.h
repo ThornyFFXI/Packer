@@ -6,7 +6,7 @@
 #endif
 
 #include "C:\Program Files (x86)\Ashita 4\plugins\sdk\Ashita.h"
-#include "thirdparty\rapidxml.hpp"
+#include "..\common\thirdparty\rapidxml.hpp"
 #include <chrono>
 #include <vector>
 using namespace std;
@@ -222,8 +222,8 @@ public:
 
     packerConfig_t()
         : EquipBags({8, 10, 11, 12, 0})
-        , ForceEnableBags({})
-        , ForceDisableBags({})
+        , ForceEnableBags(std::list<int32_t>())
+        , ForceDisableBags(std::list<int32_t>())
         , EnableThreading(true)
         , EnableWeaponPriority(true)
         , EnableDirtyPackets(false)

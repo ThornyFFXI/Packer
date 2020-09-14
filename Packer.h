@@ -6,10 +6,11 @@
 #endif
 
 #include "C:\Program Files (x86)\Ashita 4\plugins\sdk\Ashita.h"
-#include "safePacketInjector.h"
-#include "thirdparty\rapidxml.hpp"
+#include "..\common\safePacketInjector.h"
+#include "..\common\thirdparty\rapidxml.hpp"
+#include "..\common\Output.h"
+#include "..\common\Settings.h"
 #include "constants.h"
-#include "Output.h"
 #include "Structs.h"
 
 #define DEFAULT_MOVE_INDEX 82
@@ -53,7 +54,7 @@ public:
     }
     double GetVersion(void) const override
     {
-        return 0.02f;
+        return 0.03f;
     }
     int32_t GetPriority(void) const override
     {
@@ -77,6 +78,7 @@ private:
     DWORD pZoneFlags;
     DWORD pZoneOffset;
     OutputHelpers* pOutput;
+    SettingsHelper* pSettings;
     eventState_t mEventState;
     string mCurrentProfile;
     gearState_t mGear;
@@ -90,7 +92,6 @@ private:
     void clearProfile();
     void loadDefaultProfile(bool forceReload);
     void loadSpecificProfile(string fileName);
-    bool loadXml(char* buffer, xml_document<>* document, string path);
     bool writeDefaultProfile(string path);
     bool parseProfileXml(xml_document<>* xmlDocument);
     bool parseAshitacastXml(xml_document<>* xmlDocument, std::list<itemOrder_t>* equipment, std::list<itemOrder_t>* items);

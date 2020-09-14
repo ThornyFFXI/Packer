@@ -7,46 +7,32 @@ void packer::loadDefaultProfile(bool forceReload)
     stopEvent();
     clearProfile();
 
-    stringstream path;
-    path << m_AshitaCore->GetInstallPath();
-    path << "config\\packer\\";
-    if ((!CreateDirectory(path.str().c_str(), NULL) &&
-            ERROR_ALREADY_EXISTS != GetLastError()))
-    {
-        pOutput->error_f("Default profile could not be loaded.  Could not find or create directory. [$H%s$R]", path.str().c_str());
-        return;
-    }
+    bool exists;
+    std::string path = pSettings->GetCharacterSettingsPath(mServer.charName.c_str());
 
-    string profile = path.str() + mServer.charName + ".xml";
-    if (INVALID_FILE_ATTRIBUTES == GetFileAttributes(profile.c_str()))
+    if (path == "FILE_NOT_FOUND")
     {
-        profile = path.str() + "default.xml";
-        if (INVALID_FILE_ATTRIBUTES == GetFileAttributes(profile.c_str()))
+        path = pSettings->GetDefaultSettingsPath();
+        if (!writeDefaultProfile(path))
         {
-            if (!writeDefaultProfile(profile))
-            {
-                pOutput->error_f("Default profile could not be created. [$H%s$R]", profile.c_str());
-                return;
-            }
+            pOutput->error_f("Default profile could not be created. [$H%s$R]", path.c_str());
+            return;        
         }
     }
 
-    if ((forceReload) || (profile != mCurrentProfile))
+    if ((forceReload) || (path != pSettings->GetLoadedXmlPath()))
     {
-        char* buffer = NULL;
-        xml_document<> document;
-        if (loadXml(buffer, &document, profile))
+        xml_document<>* document = pSettings->LoadSettingsXml(path);
+        if (document != NULL)
         {
-            if (parseProfileXml(&document))
+            if (parseProfileXml(document))
             {
-                mCurrentProfile = profile;
-                pOutput->message_f("Config loaded. [$H%s$R]", profile.c_str());
+                pOutput->message_f("Config loaded. [$H%s$R]", path.c_str());
             }
             else
             {
                 clearProfile();
             }
-            delete[] buffer;
         }
     }
 }
@@ -55,41 +41,24 @@ void packer::loadSpecificProfile(string fileName)
     stopEvent();
     clearProfile();
 
-    string profile = fileName;
-
-    if (INVALID_FILE_ATTRIBUTES == GetFileAttributes(profile.c_str())) //Check for absolute path
+    std::string path = pSettings->GetInputSettingsPath(fileName.c_str());
+    if (path == "FILE_NOT_FOUND")
     {
-        profile = string(m_AshitaCore->GetInstallPath()) + "config\\packer\\" + fileName;
-        if (INVALID_FILE_ATTRIBUTES == GetFileAttributes(profile.c_str())) //Check for filename in packer's config directory
-        {
-            if (endsWith(profile, ".xml"))
-            {
-                pOutput->error_f("Profile could not be loaded.  File not found.  [$H%s$R]", profile.c_str());
-                return;
-            }
-            profile += ".xml";
-            if (INVALID_FILE_ATTRIBUTES == GetFileAttributes(profile.c_str())) //Check if user omitted the .xml
-            {
-                pOutput->error_f("Profile could not be loaded.  File not found.  [$H%s$R]", profile.c_str());
-                return;
-            }
-        }
+        pOutput->error_f("Profile could not be loaded.  File not found.  [$H%s$R]", fileName.c_str());
+        return;
     }
 
-    char* buffer = NULL;
-    xml_document<> document;
-    if (loadXml(buffer, &document, profile))
+    xml_document<>* document = pSettings->LoadSettingsXml(path);
+    if (document != NULL)
     {
-        if (parseProfileXml(&document))
+        if (parseProfileXml(document))
         {
-            mCurrentProfile = profile;
-            pOutput->message_f("Config loaded. [$H%s$R]", profile.c_str());
+            pOutput->message_f("Config loaded. [$H%s$R]", path.c_str());
         }
         else
         {
             clearProfile();
         }
-        delete[] buffer;
     }
 }
 bool packer::parseProfileXml(xml_document<>* xmlDocument)
@@ -126,6 +95,8 @@ bool packer::parseProfileXml(xml_document<>* xmlDocument)
                 {
                     string bag;
                     getline(stream, bag, ',');
+                    if (bag.length() < 1)
+                        break;
                     int bagIndex = atoi(bag.c_str());
                     if ((bagIndex < 0) || (bagIndex > 12))
                         continue;
@@ -139,6 +110,8 @@ bool packer::parseProfileXml(xml_document<>* xmlDocument)
                 while (stream.good())
                 {
                     string bag;
+                    if (bag.length() < 1)
+                        break;
                     getline(stream, bag, ',');
                     int bagIndex = atoi(bag.c_str());
                     if ((bagIndex < 0) || (bagIndex > 12))
@@ -495,50 +468,4 @@ void packer::integrateOrder(list<itemOrder_t>* list, itemOrder_t order)
         }
     }
     list->push_back(order);
-}
-
-bool packer::loadXml(char* buffer, xml_document<>* document, string path)
-{
-    ifstream fileReader(path, ios::in | ios::binary | ios::ate);
-    if (!fileReader.is_open())
-    {
-        pOutput->error_f("XML could not be loaded.  File not found.  [$H%s$R]", path.c_str());
-        return false;
-    }
-
-    uint64_t fileSize = fileReader.tellg();
-    buffer            = new char[fileSize + 1];
-    fileReader.seekg(0, ios::beg);
-    fileReader.read(buffer, fileSize);
-    fileReader.close();
-    buffer[fileSize]    = '\0';
-
-    char* include = strstr(buffer, "<include");
-    if (include)
-    {
-        uint64_t line = static_cast<uint64_t>(count(buffer, include, '\n') + 1);
-        pOutput->error_f("Could not load XML.  Include tag was found at line $H%d$R.", line);
-        delete[] buffer;
-        return false;    
-    }
-
-    try
-    {
-        document->parse<0>(buffer);
-    }
-    catch (const parse_error& e)
-    {
-        uint64_t line = static_cast<uint64_t>(count(buffer, e.where<char>(), '\n') + 1);
-        pOutput->error_f("Could not load XML.  Parse error[$H%s$R] at line $H%d$R.  [$H%s$R]", e.what(), line, path.c_str());
-        delete[] buffer;
-        return false;
-    }
-    catch (...)
-    {
-        pOutput->error_f("Could not load XML.  Unknown error during XML parsing.  [$H%s$R]", path.c_str());
-        delete[] buffer;
-        return false;
-    }
-
-    return true;
 }
