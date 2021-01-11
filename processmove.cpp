@@ -200,6 +200,9 @@ bool packer::tryFetch(std::list<itemLoc_t>* fetchList, int container, bool canSt
         for (int y = 1; y < mGear.containermax[x]; y++)
         {
             itemSlotInfo_t* item = &mGear.items[x][y];
+            if (item->isStuck)
+                continue;
+
             if ((item->targetCount != 0) || (item->item.Count == 0))
                 continue;
 
