@@ -35,6 +35,11 @@ static bool endsWith(const std::string& str, const char* suffix)
 
 class packer : IPlugin, Ashita::Threading::Thread
 {
+private:
+    IAshitaCore* m_AshitaCore;
+    ILogManager* m_LogManager;
+    uint32_t m_PluginId;
+
 public:
     const char* GetName(void) const override
     {
@@ -54,7 +59,7 @@ public:
     }
     double GetVersion(void) const override
     {
-        return 0.03f;
+        return 0.04f;
     }
     int32_t GetPriority(void) const override
     {
