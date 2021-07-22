@@ -169,6 +169,10 @@ void packer::checkMog()
             {
                 atNomad = true;
             }
+            if ((m_AshitaCore->GetMemoryManager()->GetEntity()->GetDistance(x) < 36) && (strcmp(m_AshitaCore->GetMemoryManager()->GetEntity()->GetName(x), "Pilgrim Moogle") == 0))
+            {
+                atNomad = true;
+            }
         }
     }
 

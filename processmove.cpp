@@ -151,10 +151,33 @@ std::list<itemLoc_t> packer::createFetchList(int container)
 
             for (std::list<itemTarget_t>::iterator iter = item->targets.begin(); iter != item->targets.end(); iter++)
             {
+                //Items that have to go in this container go to front of priority.
                 if (iter->container == container)
                     fetchList.push_front(itemLoc_t(x, y, iter->container));
-                else if ((iter->container == -2) && (containerIsEquip) && (!currentIsEquip) && (x != 0))
-                    fetchList.push_back(itemLoc_t(x, y, iter->container));
+
+                //Items that could go in the container go to back of priority.
+                else if ((iter->container == -2) && (containerIsEquip))
+                {
+                    if (!currentIsEquip)
+                        fetchList.push_back(itemLoc_t(x, y, iter->container));
+                    else
+                    {
+                        //If current container is lower priority than the container we're filling, add to back of priority.
+                        bool foundCurrent = false;
+                        for (std::list<containerInfo_t>::iterator iContainer = mConfig.containers.begin(); iContainer != mConfig.containers.end(); iContainer++)
+                        {
+                            if (iContainer->containerIndex == container)
+                            {
+                                foundCurrent = true;
+                            }
+                            else if ((foundCurrent) && (iContainer->containerIndex == x))
+                            {
+                                fetchList.push_back(itemLoc_t(x, y, iter->container));
+                                break;
+                            }
+                        }
+                    }
+                }
             }
         }
     }
