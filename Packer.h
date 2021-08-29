@@ -43,23 +43,23 @@ private:
 public:
     const char* GetName(void) const override
     {
-        return u8"Packer";
+        return "Packer";
     }
     const char* GetAuthor(void) const override
     {
-        return u8"Thorny";
+        return "Thorny";
     }
     const char* GetDescription(void) const override
     {
-        return u8"A plugin to automatically gather equipment and organize inventory containers.";
+        return "A plugin to automatically gather equipment and organize inventory containers.";
     }
     const char* GetLink(void) const override
     {
-        return u8"https://github.com/Lolwutt/packer";
+        return "https://github.com/Lolwutt/packer";
     }
     double GetVersion(void) const override
     {
-        return 0.05f;
+        return 0.06f;
     }
     int32_t GetPriority(void) const override
     {
