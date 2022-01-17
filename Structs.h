@@ -110,6 +110,7 @@ struct itemOrder_t
     {
         strcpy_s(name, 32, node->value());
         resource       = pResource;
+        quantityNeeded = 1;
         quantityFound  = 0;
         all            = false;
         augment        = false;
