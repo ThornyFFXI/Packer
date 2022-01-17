@@ -316,6 +316,16 @@ void packer::HandleEvent(const char* eventName, const void* eventData, const uin
         else
             gear(event->fileName);
     }
+    if (_stricmp(eventName, "packer_lac_gear") == 0)
+    {
+        stopEvent();
+
+        //Create a new event.
+        mEventState.eventIsActive  = true;
+        strcpy_s(mEventState.eventName, 256, "GEAR");
+        strcpy_s(mEventState.returnEventName, 256, "LAC");
+        gear((lacPackerEvent_t*)eventData);
+    }
     if (_stricmp(eventName, "packer_organize") == 0)
     {
         stopEvent();
@@ -325,9 +335,12 @@ void packer::HandleEvent(const char* eventName, const void* eventData, const uin
         mEventState.eventIsActive  = true;
         strcpy_s(mEventState.eventName, 256, "ORGANIZE");
         strcpy_s(mEventState.returnEventName, 256, event->returnEvent);
-
         //Trigger actual organize process.
         organize();
+    }
+    if (_stricmp(eventName, "packer_lac_validate") == 0)
+    {
+        validate((lacPackerEvent_t*)eventData);
     }
     if (_stricmp(eventName, "packer_validate") == 0)
     {

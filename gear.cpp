@@ -64,3 +64,42 @@ void packer::gear(xml_document<>* document)
     //Notify the plugin that requested the event that it has began.
     sendEventResponse("STARTED");
 }
+void packer::gear(lacPackerEvent_t* lacEvent)
+{
+    mGear.equipment.clear();
+    mGear.other.clear();
+    for (int x = 0; x < lacEvent->EntryCount; x++)
+    {
+        IItem* pResource = m_AshitaCore->GetResourceManager()->GetItemByName(lacEvent->Entries[x].Name, 0);
+        if (!pResource)
+        {
+            pOutput->error_f("Invalid item data received from LAC.  It will be ignored.  [Item:$H%s$R]", lacEvent->Entries[x].Name);
+            continue;
+        }
+        else if (pResource->Flags & 0x0800)
+        {
+            mGear.equipment.push_back(itemOrder_t(lacEvent->Entries[x], pResource));
+        }
+        else
+        {
+            mGear.other.push_back(itemOrder_t(lacEvent->Entries[x], pResource));
+        }
+    }
+
+    if (!mServer.inventoryLoaded)
+    {
+        pOutput->error("Could not perform gear.  Inventory has not finished loading since you last zoned.");
+        sendEventResponse("FAILED");
+        mEventState.eventIsActive = false;
+        return;
+    }
+
+    //Set flag so that we know inventory has to be reparsed.
+    mGear.reparse = true;
+
+    //Set flag to block user item movements and start packer item movements.
+    mGear.active = true;
+
+    //Notify the plugin that requested the event that it has began.
+    sendEventResponse("STARTED");
+}

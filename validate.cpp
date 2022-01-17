@@ -51,6 +51,39 @@ void packer::validate(xml_document<>* document)
     validate(&equipment, &items);
 }
 
+void packer::validate(lacPackerEvent_t* lacEvent)
+{
+    if (!mServer.inventoryLoaded)
+    {
+        pOutput->error("Could not perform validate.  Inventory has not finished loading since you last zoned.");
+        return;
+    }
+
+    std::list<itemOrder_t> equipment;
+    std::list<itemOrder_t> items;
+    for (int x = 0; x < lacEvent->EntryCount; x++)
+    {
+        IItem* pResource = m_AshitaCore->GetResourceManager()->GetItemByName(lacEvent->Entries[x].Name, 0);
+        if (!pResource)
+        {
+            pOutput->error_f("Invalid item data received from LAC.  It will be ignored.  [Item:$H%s$R]", lacEvent->Entries[x].Name);
+            continue;
+        }
+        else if (pResource->Flags & 0x0800)
+        {
+            equipment.push_back(itemOrder_t(lacEvent->Entries[x], pResource));
+        }
+        else
+        {
+            items.push_back(itemOrder_t(lacEvent->Entries[x], pResource));
+        }
+    }
+
+    checkMog();
+    validate(&equipment, &items);
+}
+
+
 void packer::validate(std::list<itemOrder_t>* equipment, std::list<itemOrder_t>* items)
 {
     for (std::list<int>::iterator bagIter = mConfig.EquipBags.begin(); bagIter != mConfig.EquipBags.end(); bagIter++)

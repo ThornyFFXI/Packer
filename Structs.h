@@ -52,6 +52,22 @@ struct itemTarget_t
     {}
 };
 
+struct lacItemOrder_t
+{
+    char Name[32];
+    int32_t Quantity;
+    int32_t AugPath;
+    int32_t AugRank;
+    int32_t AugTrial;
+    int32_t AugCount;
+    char AugString[5][100];
+};
+struct lacPackerEvent_t
+{
+    int32_t EntryCount;
+    lacItemOrder_t Entries[400];
+};
+
 struct itemOrder_t
 {
     char name[32];
@@ -65,11 +81,35 @@ struct itemOrder_t
     int32_t augTrial;
     vector<string> augStrings;
 
+    itemOrder_t(lacItemOrder_t order, IItem* pResource)
+    {
+        strcpy_s(name, 32, order.Name);
+        resource = pResource;
+        quantityFound = 0;
+        augPath  = order.AugPath;
+        augRank = order.AugRank;
+        augTrial = order.AugTrial;
+        for (int x = 0; x < order.AugCount; x++)
+        {
+            augStrings.push_back(std::string(order.AugString[x]));
+        }
+        if (order.Quantity == -1)
+        {
+            quantityNeeded = 1;
+            all            = true;
+        }
+        else
+        {
+            quantityNeeded = order.Quantity;
+            all            = false;
+        }
+        augment = ((augPath != -1) || (augRank != -1) || (augTrial != -1) || (augStrings.size() > 0));
+    }
+
     itemOrder_t(xml_node<>* node, IItem* pResource)
     {
         strcpy_s(name, 32, node->value());
         resource       = pResource;
-        quantityNeeded = 1;
         quantityFound  = 0;
         all            = false;
         augment        = false;

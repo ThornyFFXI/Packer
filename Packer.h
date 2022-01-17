@@ -59,7 +59,7 @@ public:
     }
     double GetVersion(void) const override
     {
-        return 0.06f;
+        return 1.00f;
     }
     int32_t GetPriority(void) const override
     {
@@ -120,6 +120,7 @@ private:
     //gear.cpp
     void gear(const char* filename);
     void gear(xml_document<>* document);
+    void gear(lacPackerEvent_t* lacEvent);
 
     //organize.cpp
     void organize();
@@ -127,6 +128,7 @@ private:
     //validate.cpp
     void validate(const char* filename);
     void validate(xml_document<>* document);
+    void validate(lacPackerEvent_t* lacEvent);
     void validate(std::list<itemOrder_t>* equipment, std::list<itemOrder_t>* items);
 
     //preparemove.cpp
