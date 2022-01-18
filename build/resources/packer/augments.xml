@@ -221,7 +221,7 @@
 		</augment>
 		<augment id="70">
 			<params stat="Mag. Acc."  offset="1" />
-			<params stat="'Mag.Atk.Bns.'"  offset="1" />
+			<params stat="'Mag. Atk. Bns.'"  offset="1" />
 		</augment>
 		<augment id="71">
 			<params stat="Damage taken"  offset="1" multiplier="-1" percent="true" />
@@ -246,11 +246,11 @@
 		</augment>
 		<augment id="80">
 			<params stat="Mag. Acc"  offset="1" />
-			<params stat="/Mag. Dmg."  offset="1" />
+			<params stat="Magic Damage "  offset="1" />
 		</augment>
 		<augment id="81">
 			<params stat="Eva."  offset="1" />
-			<params stat="/Mag. Eva."  offset="1" />
+			<params stat="Mag. Eva."  offset="1" />
 		</augment>
 		<augment id="82">
 			<params stat="MP"  offset="1" multiplier="2" />
@@ -276,7 +276,7 @@
 			<params stat="Pet: Mag. Acc."  offset="1" />
 		</augment>
 		<augment id="101">
-			<params stat="Pet: 'Mag.Atk.Bns.'"  offset="1" />
+			<params stat="Pet: 'Mag. Atk. Bns.'"  offset="1" />
 		</augment>
 		<augment id="102">
 			<params stat="Pet: Crit.hit rate "  offset="1" />
@@ -300,7 +300,7 @@
 		</augment>
 		<augment id="108">
 			<params stat="Pet: Mag. Acc."  offset="1" />
-			<params stat="Pet: 'Mag.Atk.Bns.'"  offset="1" />
+			<params stat="Pet: 'Mag. Atk. Bns.'"  offset="1" />
 		</augment>
 		<augment id="109">
 			<params stat="Pet: 'Dbl.Atk.'"  offset="1" />
@@ -337,7 +337,7 @@
 			<params stat="Pet: 'Mag.Def.Bns.'"  offset="1" />
 		</augment>
 		<augment id="120">
-			<params stat="Avatar: 'Mag.Atk.Bns.'"  offset="1" />
+			<params stat="Avatar: 'Mag. Atk. Bns.'"  offset="1" />
 		</augment>
 		<augment id="121">
 			<params stat="Pet: Breath"  offset="1" />
@@ -368,7 +368,7 @@
 			<params stat="Pet:" offset =" 0" />
 		</augment>
 		<augment id="133">
-			<params stat="'Mag.Atk.Bns.'"  offset="1" />
+			<params stat="'Mag. Atk. Bns.'"  offset="1" />
 		</augment>
 		<augment id="134">
 			<params stat="'Mag.Def.Bns.'"  offset="1" />
@@ -1680,10 +1680,10 @@
 			<params stat="Mag. Evasion"  offset="1" multiplier="3" />
 		</augment>
 		<augment id="1155">
-			<params stat="Phys. dmg. taken"  offset="1" multiplier="-2" percent="true" />
+			<params stat="Phys. dmg. taken "  offset="1" multiplier="-2" percent="true" />
 		</augment>
 		<augment id="1156">
-			<params stat="Magic dmg. taken"  offset="1" multiplier="-2" percent="true" />
+			<params stat="Magic dmg. taken "  offset="1" multiplier="-2" percent="true" />
 		</augment>
 		<augment id="1157">
 			<params stat="Spell interruption rate down"  offset="1" multiplier="-2" percent="true" />
@@ -1776,7 +1776,7 @@
 			<params stat="Enhances 'Aggressive Aim' effect"  offset="0" multiplier="0" />
 		</augment>
 		<augment id="1330">
-			<params stat="Enhances 'Warrior\'s Charge' effect"  offset="0" multiplier="0" />
+			<params stat="Enhances 'Warrior's Charge' effect"  offset="0" multiplier="0" />
 		</augment>
 		<augment id="1331">
 			<params stat="Enhances 'Tomahawk' effect"  offset="0" multiplier="0" />
@@ -1845,7 +1845,7 @@
 			<params stat="Enhances 'Feint' effect"  offset="0" multiplier="0" />
 		</augment>
 		<augment id="1361">
-			<params stat="Enhances 'Assassin\'s Charge' effect"  offset="0" multiplier="0" />
+			<params stat="Enhances 'Assassin's Charge' effect"  offset="0" multiplier="0" />
 		</augment>
 		<augment id="1364">
 			<params stat="Enhances 'Iron Will' effect"  offset="0" multiplier="0" />
@@ -2371,10 +2371,10 @@
 			<params stat="Evasion" offset="256" />
 		</augment>
 		<augment id="20">
-			<params stat="'Mag.Atk.Bns.'" offset="1" />
+			<params stat="'Mag. Atk. Bns.'" offset="1" />
 		</augment>
 		<augment id="21">
-			<params stat="'Mag.Atk.Bns.'" offset="256" />
+			<params stat="'Mag. Atk. Bns.'" offset="256" />
 		</augment>
 		<augment id="22">
 			<params stat="'Mag.Def.Bns.'" offset="1" />
@@ -2405,9 +2405,6 @@
 		</augment>
 		<augment id="115">
 			<params stat="Magic damage" offset="1" />
-		</augment>
-		<augment id="116">
-			<params stat="Blood Pact Dmg." offset="1" />
 		</augment>
 		<augment id="116">
 			<params stat="Blood Pact Dmg." offset="1" />
@@ -2446,7 +2443,7 @@
 			<params stat="Potency of 'Cure' effect received " offset="1" percent="true" />
 		</augment>
 		<augment id="128">
-			<params stat="Pet: 'Mag.Atk.Bns.'" offset="1" />
+			<params stat="Pet: 'Mag. Atk. Bns.'" offset="1" />
 		</augment>
 		<augment id="129">
 			<params stat="Pet: Mag. Acc." offset="1" />
