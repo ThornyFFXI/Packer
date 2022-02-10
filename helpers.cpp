@@ -176,8 +176,9 @@ void packer::checkMog()
         }
     }
 
-    DWORD Memloc = Read32(pWardrobe, 1);
-    Memloc       = Read32(Memloc, 0);
+    DWORD Memloc           = Read32(pWardrobe, 0);
+    Memloc                 = Read32(Memloc, 0);
+    uint8_t flags          = Read8(Memloc, 0xB4);
 
     mGear.hasContainer[0] = true; //Always have inventory.
     mGear.hasContainer[1] = (atNomad || inMog); //Safe
@@ -190,8 +191,12 @@ void packer::checkMog()
     mGear.hasContainer[8] = true; //Wardrobe
     mGear.hasContainer[9] = (atNomad || inMog); //Safe2
     mGear.hasContainer[10] = true; //Wardrobe2
-    mGear.hasContainer[11] = ((Read8(Memloc, 0xB4) & 0x04) != 0); //Wardrobe3
-    mGear.hasContainer[12] = ((Read8(Memloc, 0xB4) & 0x08) != 0); //Wardrobe4
+    mGear.hasContainer[11] = ((flags & 0x04) != 0);                //Wardrobe3
+    mGear.hasContainer[12] = ((flags & 0x08) != 0);                //Wardrobe4
+    mGear.hasContainer[13] = ((flags & 0x10) != 0);                //Wardrobe5
+    mGear.hasContainer[14] = ((flags & 0x20) != 0);                //Wardrobe6
+    mGear.hasContainer[15] = ((flags & 0x40) != 0);                //Wardrobe7
+    mGear.hasContainer[16] = ((flags & 0x80) != 0);                //Wardrobe8
 
     for (std::list<int>::iterator iter = mConfig.ForceEnableBags.begin(); iter != mConfig.ForceEnableBags.end(); iter++)
     {

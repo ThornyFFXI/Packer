@@ -289,6 +289,10 @@ bool packer::writeDefaultProfile(string path)
         myfile << "\t\t<" << gContainerNames[10] << " equip=\"true\" />\n";
         myfile << "\t\t<" << gContainerNames[11] << " equip=\"true\" />\n";
         myfile << "\t\t<" << gContainerNames[12] << " equip=\"true\" />\n";
+        myfile << "\t\t<" << gContainerNames[13] << " equip=\"true\" />\n";
+        myfile << "\t\t<" << gContainerNames[14] << " equip=\"true\" />\n";
+        myfile << "\t\t<" << gContainerNames[15] << " equip=\"true\" />\n";
+        myfile << "\t\t<" << gContainerNames[16] << " equip=\"true\" />\n";
         myfile << "\t\t<" << gContainerNames[5] << " other=\"true\" />\n";
         myfile << "\t\t<" << gContainerNames[6] << " other=\"true\" />\n";
         myfile << "\t\t<" << gContainerNames[7] << " other=\"true\" />\n";
@@ -298,7 +302,7 @@ bool packer::writeDefaultProfile(string path)
 
         myfile << "\t<!--List bags at the same level as priority/settings if you want to specify items that always belong in those bags.-->\n";
 
-        for (int x = 0; x < 13; x++)
+        for (int x = 0; x < CONTAINER_MAX; x++)
         {
             //Skip temporary items.
             if (x == 3)

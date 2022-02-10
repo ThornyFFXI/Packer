@@ -23,7 +23,7 @@ bool packer::Initialize(IAshitaCore* core, ILogManager* logger, const uint32_t i
 
     MODULEINFO mod = { 0 };
     ::GetModuleInformation(::GetCurrentProcess(), ::GetModuleHandle("FFXiMain.dll"), &mod, sizeof(MODULEINFO));
-    pWardrobe   = Ashita::Memory::FindPattern((uintptr_t)mod.lpBaseOfDll, (uintptr_t)mod.SizeOfImage, "A1????????568BF1578B88????????C1E902F6C101", 0, 0);
+    pWardrobe  = Ashita::Memory::FindPattern((uintptr_t)mod.lpBaseOfDll, (uintptr_t)mod.SizeOfImage, "A1????????8B88B4000000C1E907F6C101E9", 1, 0);
     pZoneFlags = Ashita::Memory::FindPattern((uintptr_t)mod.lpBaseOfDll, (uintptr_t)mod.SizeOfImage, "8B8C24040100008B90????????0BD18990????????8B15????????8B82", 0, 0);
 
     if (pZoneFlags == 0)

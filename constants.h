@@ -5,7 +5,7 @@
 #pragma once
 #endif
 
-#define CONTAINER_MAX 13
+#define CONTAINER_MAX 17
 #define SLOT_MAX 16
 #define PACKET_MAX 31
 
@@ -26,7 +26,11 @@ const string gContainerNames[CONTAINER_MAX] =
         "safe2",
         "wardrobe2",
         "wardrobe3",
-        "wardrobe4"};
+        "wardrobe4",
+        "wardrobe5",
+        "wardrobe6",
+        "wardrobe7",
+        "wardrobe8"};
 
 const string gSlotNames[SLOT_MAX] = {
     "main",
