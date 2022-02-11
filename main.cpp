@@ -246,7 +246,7 @@ bool packer::HandleIncomingPacket(uint16_t id, uint32_t size, const uint8_t* dat
         mServer.inventoryLoaded = false;
     }
 
-    if (id == 0x1D)
+    if ((id == 0x1D) && (Read8(data, 0x04) == 1))
     {
         mServer.inventoryLoaded = true;
     }
