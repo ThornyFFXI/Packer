@@ -51,7 +51,7 @@ void packer::validate(xml_document<>* document)
     validate(&equipment, &items);
 }
 
-void packer::validate(lacPackerEvent_t* lacEvent)
+void packer::validate(GearListEvent_t* validateEvent)
 {
     if (!mServer.inventoryLoaded)
     {
@@ -61,21 +61,21 @@ void packer::validate(lacPackerEvent_t* lacEvent)
 
     std::list<itemOrder_t> equipment;
     std::list<itemOrder_t> items;
-    for (int x = 0; x < lacEvent->EntryCount; x++)
+    for (int x = 0; x < validateEvent->EntryCount; x++)
     {
-        IItem* pResource = m_AshitaCore->GetResourceManager()->GetItemByName(lacEvent->Entries[x].Name, 0);
+        IItem* pResource = m_AshitaCore->GetResourceManager()->GetItemByName(validateEvent->Entries[x].Name, 0);
         if (!pResource)
         {
-            pOutput->error_f("Invalid item data received from LAC.  It will be ignored.  [Item:$H%s$R]", lacEvent->Entries[x].Name);
+            pOutput->error_f("Invalid item data received from validate event.  It will be ignored.  [Item:$H%s$R]", validateEvent->Entries[x].Name);
             continue;
         }
         else if (pResource->Flags & 0x0800)
         {
-            equipment.push_back(itemOrder_t(lacEvent->Entries[x], pResource));
+            equipment.push_back(itemOrder_t(validateEvent->Entries[x], pResource));
         }
         else
         {
-            items.push_back(itemOrder_t(lacEvent->Entries[x], pResource));
+            items.push_back(itemOrder_t(validateEvent->Entries[x], pResource));
         }
     }
 

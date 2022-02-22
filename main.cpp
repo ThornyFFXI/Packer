@@ -84,25 +84,11 @@ bool packer::HandleCommand(int32_t mode, const char* command, bool injected)
         else if ((argcount > 2) && (_stricmp(args[1].c_str(), "gear") == 0))
         {
             stopEvent();
-
-            //Create a new event.
-            mEventState.eventIsActive  = true;
-            strcpy_s(mEventState.eventName, 256, "GEAR");
-            strcpy_s(mEventState.returnEventName, 256, "SELF_EVENT");
-
-            //Trigger actual gear process.
             gear(args[2].c_str());
         }
         else if (_stricmp(args[1].c_str(), "organize") == 0)
         {
             stopEvent();
-
-            //Create a new event.
-            mEventState.eventIsActive  = true;
-            strcpy_s(mEventState.eventName, 256, "ORGANIZE");
-            strcpy_s(mEventState.returnEventName, 256, "SELF_EVENT");
-
-            //Trigger actual organize process.
             organize();
         }
         else if (_stricmp(args[1].c_str(), "stop") == 0)
@@ -293,6 +279,14 @@ bool packer::HandleOutgoingPacket(uint16_t id, uint32_t size, const uint8_t* dat
                 return true;
             }
         }
+        if ((id == 0x50) && (Read8(data, 0x04)))
+        {
+            if (injected)
+                pOutput->error_f("Packet(ID %#03x)[Injected] blocked.  Please do not attempt to modify inventory while Packer is running.", id);
+            else
+                pOutput->error_f("Packet(ID %#03x)[Natural] blocked.  Please do not attempt to modify inventory while Packer is running.", id);
+            return true;
+        }
     }
 
     return false;
@@ -303,52 +297,18 @@ void packer::HandleEvent(const char* eventName, const void* eventData, const uin
     if (_stricmp(eventName, "packer_gear") == 0)
     {
         stopEvent();
-
-        //Create a new event.
-        packerPluginEvent_t* event = (packerPluginEvent_t*)eventData;
-        mEventState.eventIsActive  = true;
-        strcpy_s(mEventState.eventName, 256, "GEAR");
-        strcpy_s(mEventState.returnEventName, 256, event->returnEvent);
-
-        //Trigger actual gear process.
-        if (event->document != NULL)
-            gear(event->document);
-        else
-            gear(event->fileName);
-    }
-    if (_stricmp(eventName, "packer_lac_gear") == 0)
-    {
-        stopEvent();
-
-        //Create a new event.
-        mEventState.eventIsActive  = true;
-        strcpy_s(mEventState.eventName, 256, "GEAR");
-        strcpy_s(mEventState.returnEventName, 256, "LAC");
-        gear((lacPackerEvent_t*)eventData);
+        GearListEvent_t* gearEvent    = (GearListEvent_t*)eventData;
+        gear(gearEvent);
     }
     if (_stricmp(eventName, "packer_organize") == 0)
     {
         stopEvent();
-
-        //Create a new event.
-        packerPluginEvent_t* event = (packerPluginEvent_t*)eventData;
-        mEventState.eventIsActive  = true;
-        strcpy_s(mEventState.eventName, 256, "ORGANIZE");
-        strcpy_s(mEventState.returnEventName, 256, event->returnEvent);
-        //Trigger actual organize process.
+        GearListEvent_t* organizeEvent = (GearListEvent_t*)eventData;
         organize();
-    }
-    if (_stricmp(eventName, "packer_lac_validate") == 0)
-    {
-        validate((lacPackerEvent_t*)eventData);
     }
     if (_stricmp(eventName, "packer_validate") == 0)
     {
-        //Validate doesn't use a response system, as it is done in place.
-        packerPluginEvent_t* event = (packerPluginEvent_t*)eventData;
-        if (event->document != NULL)
-            validate(event->document);
-        else
-            validate(event->fileName);
+        GearListEvent_t* validateEvent = (GearListEvent_t*)eventData;
+        validate(validateEvent);
     }
 }

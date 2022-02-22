@@ -40,23 +40,11 @@ void packer::stopEvent()
     waitForThread();
 
     //Disable and interrupt any existing event.
-    mGear.active = false;
-    sendEventResponse("INTERRUPTED");
-    mEventState.eventIsActive = false;
-}
-
-void packer::sendEventResponse(const char* text)
-{
-    if (mEventState.eventIsActive)
+    if (mGear.active)
     {
-        char buffer[512];
-        sprintf_s(buffer, 512, "%s_%s_%s", mEventState.returnEventName, mEventState.eventName, text);
-        pOutput->debug_f("Packer Event: %s", buffer);
-
-        if (strcmp(mEventState.returnEventName, "SELF_EVENT") != 0)
-        {
-            m_AshitaCore->GetPluginManager()->RaiseEvent(buffer, NULL, 0);
-        }
+        mGear.active = false;
+        m_AshitaCore->GetPluginManager()->RaiseEvent("packer_interrupted", nullptr, 0);
+        m_AshitaCore->GetPluginManager()->RaiseEvent("ashitacastany_enable", nullptr, 0);
     }
 }
 

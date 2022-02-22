@@ -8,6 +8,7 @@
 		<forceenablebags></forceenablebags> <!-- List of bags that will always be treated as accessible.  Primarily for private server usage.-->
         <forcedisablebags></forcedisablebags> <!-- List of bags that will always be treated as inaccessible.  Primarily for private server usage.-->
 		<threading>true</threading>  <!--When enabled, initial move lists will be created in a background thread.  Disabling this will cause client stutter when creating move lists.  You may still want to disable it on computers with very few cores or very high single core performance.-->
+        <naked>true</naked> <!--When enabled, equipment will be removed prior to moving items, so that anything currently equipped can also be moved.-->
 		<weaponpriority>true</weaponpriority> <!--If this is enabled, all weapons will be stored in your first equipment bag.  This makes it easier to swap weapons from the menu without searching bags.  Since default first bag is 8(wardrobe), that is where they will be unless modified.-->
 		<dirtypackets>false</dirtypackets> <!--When enabled, packer will use item move packets to directly combine stacks and bypass inventory.  This is not possible with the legitimate game client and may be a ban risk, but will increase speed.-->
 		<defrag>true</defrag> <!--When enabled, packer will combine like stacks after organizing.  Requires a movelimit of 4 or higher, or dirtypackets enabled.-->

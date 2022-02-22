@@ -43,7 +43,7 @@ uint32_t packer::ThreadEntry()
 void packer::flagMoveItems()
 {
     //Flag AC stuff only if we're in a GEAR event.
-    if (strcmp(mEventState.eventName, "GEAR") == 0)
+    if (mGear.useequipmentlist)
     {
         //Sort bags by priority to ensure the best outcome when selecting which items will be retrieved.
         //Valid bags where the item can't be removed, then valid bags where the item can be removed, then invalid bags where the item can't be removed, then invalid bags where the item can be removed.

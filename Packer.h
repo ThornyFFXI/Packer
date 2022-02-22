@@ -59,7 +59,7 @@ public:
     }
     double GetVersion(void) const override
     {
-        return 1.04f;
+        return 1.10f;
     }
     int32_t GetPriority(void) const override
     {
@@ -84,7 +84,6 @@ private:
     DWORD pZoneOffset;
     OutputHelpers* pOutput;
     SettingsHelper* pSettings;
-    eventState_t mEventState;
     string mCurrentProfile;
     gearState_t mGear;
     serverState_t mServer;
@@ -108,7 +107,6 @@ private:
     int getSlotIndex(const char* text);
     void waitForThread();
     void stopEvent();
-    void sendEventResponse(const char* text);
     bool itemMatchesOrder(itemOrder_t order, Ashita::FFXI::item_t* item);
     string getValidateString(itemOrder_t order, bool plural);
     void checkMog();
@@ -120,7 +118,7 @@ private:
     //gear.cpp
     void gear(const char* filename);
     void gear(xml_document<>* document);
-    void gear(lacPackerEvent_t* lacEvent);
+    void gear(GearListEvent_t* gearEvent);
 
     //organize.cpp
     void organize();
@@ -128,7 +126,7 @@ private:
     //validate.cpp
     void validate(const char* filename);
     void validate(xml_document<>* document);
-    void validate(lacPackerEvent_t* lacEvent);
+    void validate(GearListEvent_t* validateEvent);
     void validate(std::list<itemOrder_t>* equipment, std::list<itemOrder_t>* items);
 
     //preparemove.cpp

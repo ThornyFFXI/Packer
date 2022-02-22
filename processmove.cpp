@@ -3,9 +3,42 @@
 
 void packer::processItemMovement()
 {
+    //If we have naked mode enabled, and have equipment on, remove it.
+    if (mConfig.EnableNaked)
+    {
+        IInventory* pInventory = m_AshitaCore->GetMemoryManager()->GetInventory();
+        for (int x = 0; x < 16; x++)
+        {
+            Ashita::FFXI::equipmententry_t* equipData = pInventory->GetEquippedItem(x);
+            if ((equipData->Index & 0xFF) > 0)
+            {
+                if (!mGear.equipWarning)
+                {
+                    pOutput->message("Equipment was detected.  Gearing will begin after unequip is complete.");
+                    mGear.equipWarning = true;
+                }
+                m_AshitaCore->GetPluginManager()->RaiseEvent("ashitacastany_naked", nullptr, 0);
+                mGear.reparse = true;
+                return;
+            }
+        }
+    }
+
+    //If inventory isn't loaded yet, delay.
+    if (!mServer.inventoryLoaded)
+    {
+        if (!mGear.loadWarning)
+        {
+            pOutput->message("Inventory has not finished loading since you last zoned.  Gearing will begin once it has finished loading.");
+            mGear.loadWarning = true;
+        }
+        return;
+    }
+
     //If we have a thread going, we don't want to do anything.
     if ((GetHandle()) && (!this->WaitFor(0)))
         return;
+
 
     checkMog();
     //If we've called for a reparse, recheck inventory.
@@ -33,7 +66,7 @@ void packer::processItemMovement()
         return;
 
     //Success! All done, do output and signal calling plugin.
-    if (strcmp(mEventState.eventName, "GEAR") == 0)
+    if (mGear.useequipmentlist)
     {
         if (mConfig.EnableValidateAfterGear)
         {
@@ -45,8 +78,8 @@ void packer::processItemMovement()
     {
         pOutput->message("Organize completed!");
     }
-    sendEventResponse("SUCCEEDED");
-    mEventState.eventIsActive = false;
+    m_AshitaCore->GetPluginManager()->RaiseEvent("packer_finished", nullptr, 0);
+    m_AshitaCore->GetPluginManager()->RaiseEvent("ashitacastany_enable", nullptr, 0);
     mGear.active              = false;
 }
 

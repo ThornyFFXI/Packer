@@ -5,7 +5,6 @@
 void packer::loadDefaultProfile(bool forceReload)
 {
     stopEvent();
-    clearProfile();
 
     bool exists;
     std::string path = pSettings->GetCharacterSettingsPath(mServer.charName.c_str());
@@ -22,6 +21,7 @@ void packer::loadDefaultProfile(bool forceReload)
 
     if ((forceReload) || (path != pSettings->GetLoadedXmlPath()))
     {
+        clearProfile();
         xml_document<>* document = pSettings->LoadSettingsXml(path);
         if (document != NULL)
         {
@@ -133,6 +133,11 @@ bool packer::parseProfileXml(xml_document<>* xmlDocument)
             {
                 if (_stricmp(child->value(), "true") == 0)
                     mConfig.EnableDirtyPackets = true;
+            }
+            else if (_stricmp(child->name(), "naked") == 0)
+            {
+                if (_stricmp(child->value(), "false") == 0)
+                    mConfig.EnableNaked = false;
             }
             else if (_stricmp(child->name(), "nomadstorage") == 0)
             {

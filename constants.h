@@ -7,7 +7,7 @@
 
 #define CONTAINER_MAX 17
 #define SLOT_MAX 16
-#define PACKET_MAX 31
+#define PACKET_MAX 30
 
 #include <string>
 using namespace std;
@@ -71,7 +71,6 @@ const uint16_t gBlockedPacketIds[PACKET_MAX] = {
     0x42, //Pass
     0x4D, //Dbox
     0x4E, //AH
-    0x50, //Equip
     0x51, //EquipSet
     0x83, //NPC Buy
     0x84, //NPC Sell

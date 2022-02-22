@@ -12,13 +12,6 @@
 using namespace std;
 using namespace rapidxml;
 
-struct packerPluginEvent_t
-{
-    char fileName[512];
-    char returnEvent[256];
-    xml_document<>* document;
-};
-
 struct singleAugment_t
 {
     int32_t table;
@@ -52,7 +45,7 @@ struct itemTarget_t
     {}
 };
 
-struct lacItemOrder_t
+struct GearListEntry_t
 {
     char Name[32];
     int32_t Quantity;
@@ -60,13 +53,16 @@ struct lacItemOrder_t
     int32_t AugRank;
     int32_t AugTrial;
     int32_t AugCount;
-    char AugString[5][100];
+    char AugString[10][100];
 };
-struct lacPackerEvent_t
+
+struct GearListEvent_t
 {
+    char ReturnEventPrefix[256];
     int32_t EntryCount;
-    lacItemOrder_t Entries[400];
+    GearListEntry_t Entries[1000];
 };
+
 
 struct itemOrder_t
 {
@@ -81,7 +77,7 @@ struct itemOrder_t
     int32_t augTrial;
     vector<string> augStrings;
 
-    itemOrder_t(lacItemOrder_t order, IItem* pResource)
+    itemOrder_t(GearListEntry_t order, IItem* pResource)
     {
         strcpy_s(name, 32, order.Name);
         resource = pResource;
@@ -250,6 +246,7 @@ public:
     std::list<int32_t> EquipBags; //Lists which bags can be equipped from.  Order only matters for EnableWeaponPriority.
     std::list<int32_t> ForceEnableBags; //Forces bags to show as accessible.  Primarily for DSP usage.
     std::list<int32_t> ForceDisableBags; //Forces bags to read as inaccessible.  Primarily for DSP usage.
+    bool EnableNaked; //When enabled, equipment will be removed prior to moving items around so that currently equipped items can be moved.
     bool EnableThreading; //When enabled, initial move lists will be created in a background thread.
     bool EnableWeaponPriority;    //When enabled, all weapons(main/sub/range/ammo) in your AC xml will be stored in the first equipbag listed.
     bool EnableDirtyPackets;      //When enabled, packer will use item move packets to directly combine stacks and bypass inventory.
@@ -265,6 +262,7 @@ public:
         : EquipBags({8, 10, 11, 12, 0})
         , ForceEnableBags(std::list<int32_t>())
         , ForceDisableBags(std::list<int32_t>())
+        , EnableNaked(true)
         , EnableThreading(true)
         , EnableWeaponPriority(true)
         , EnableDirtyPackets(false)
@@ -274,17 +272,6 @@ public:
         , EnableNomadStorage(false)
         , EnableValidateAfterGear(true)
         , MoveLimit(200)
-    {}
-};
-
-struct eventState_t
-{
-    bool eventIsActive;
-    char eventName[256];
-    char returnEventName[256];
-
-    eventState_t()
-        : eventIsActive(false)
     {}
 };
 
@@ -365,9 +352,12 @@ struct itemSlotInfo_t
 struct gearState_t
 {
     bool active;
+    bool useequipmentlist;
     bool reparse;
     int moveCount;
+    bool equipWarning;
     bool invWarning;
+    bool loadWarning;
 
     list<itemOrder_t> equipment;
     list<itemOrder_t> other;
