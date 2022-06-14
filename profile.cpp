@@ -83,7 +83,7 @@ bool packer::parseProfileXml(xml_document<>* xmlDocument)
                     string bag;
                     getline(stream, bag, ',');
                     int bagIndex = atoi(bag.c_str());
-                    if ((bagIndex < 0) || (bagIndex > 12)) continue;
+                    if ((bagIndex < 0) || (bagIndex > 16)) continue;
                     mConfig.EquipBags.push_back(bagIndex);
                 }                
             }
@@ -98,7 +98,7 @@ bool packer::parseProfileXml(xml_document<>* xmlDocument)
                     if (bag.length() < 1)
                         break;
                     int bagIndex = atoi(bag.c_str());
-                    if ((bagIndex < 0) || (bagIndex > 12))
+                    if ((bagIndex < 0) || (bagIndex > 16))
                         continue;
                     mConfig.ForceEnableBags.push_back(bagIndex);
                 }
@@ -261,7 +261,7 @@ bool packer::writeDefaultProfile(string path)
     {
         myfile << "<packer>\n\n";
         myfile << "\t<settings>\n";
-        myfile << "\t\t<equipbags>8,10,11,12,0</equipbags> <!-- List of container indices you can equip items from.  Should only be changed when on a private server that allows players to equip from non-standard containers. -->\n";
+        myfile << "\t\t<equipbags>8,10,11,12,13,14,15,16,0</equipbags> <!-- List of container indices you can equip items from.  Should only be changed when on a private server that allows players to equip from non-standard containers. -->\n";
         myfile << "\t\t<forceenablebags></forceenablebags> <!-- List of bags that will always be treated as accessible.  Primarily for private server usage.-->\n";
         myfile << "\t\t<forcedisablebags></forcedisablebags> <!-- List of bags that will always be treated as inaccessible.  Primarily for private server usage.-->\n";
         myfile << "\t\t<threading>true</threading> <!--When enabled, initial move lists will be created in a background thread.  Disabling this will cause client stutter when parsing or reparsing inventories.  You may still want to disable it on computers with very few cores or very high single core performance.-->\n";

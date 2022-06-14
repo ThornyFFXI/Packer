@@ -259,7 +259,7 @@ public:
     std::list<containerInfo_t> containers;
 
     packerConfig_t()
-        : EquipBags({8, 10, 11, 12, 0})
+        : EquipBags({8, 10, 11, 12, 13, 14, 15, 16, 0})
         , ForceEnableBags(std::list<int32_t>())
         , ForceDisableBags(std::list<int32_t>())
         , EnableNaked(true)
