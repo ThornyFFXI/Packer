@@ -256,6 +256,7 @@ bool packer::parseProfileXml(xml_document<>* xmlDocument)
 }
 bool packer::writeDefaultProfile(string path)
 {
+    pSettings->CreateDirectories(path.c_str());
     ofstream myfile(path.c_str(), ofstream::binary);
     if (myfile.is_open())
     {
