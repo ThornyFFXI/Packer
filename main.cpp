@@ -279,12 +279,20 @@ bool packer::HandleOutgoingPacket(uint16_t id, uint32_t size, const uint8_t* dat
                 return true;
             }
         }
+        if ((id == 0x1A) && (Read16(data, 0x0A)))
+        {
+            if (injected)
+                pOutput->error_f("Packet(ID %#03x)[Injected] blocked.  Please do not attempt to use actions while Packer is running.", id);
+            else
+                pOutput->error_f("Packet(ID %#03x)[Natural] blocked.  Please do not attempt to use actions while Packer is running.", id);
+            return true;
+        }
         if ((id == 0x50) && (Read8(data, 0x04)))
         {
             if (injected)
-                pOutput->error_f("Packet(ID %#03x)[Injected] blocked.  Please do not attempt to modify inventory while Packer is running.", id);
+                pOutput->error_f("Packet(ID %#03x)[Injected] blocked.  Please do not attempt to equip items while Packer is running.", id);
             else
-                pOutput->error_f("Packet(ID %#03x)[Natural] blocked.  Please do not attempt to modify inventory while Packer is running.", id);
+                pOutput->error_f("Packet(ID %#03x)[Natural] blocked.  Please do not attempt to equip items while Packer is running.", id);
             return true;
         }
     }

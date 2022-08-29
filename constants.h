@@ -7,7 +7,7 @@
 
 #define CONTAINER_MAX 17
 #define SLOT_MAX 16
-#define PACKET_MAX 30
+#define PACKET_MAX 29
 
 #include <string>
 using namespace std;
@@ -58,7 +58,6 @@ const std::list<int> gNoItemBags = {
     12};
 
 const uint16_t gBlockedPacketIds[PACKET_MAX] = {
-    0x1A, //Action
     0x28, //Drop Item
     0x29, //Move Item
     0x32, //Trade
