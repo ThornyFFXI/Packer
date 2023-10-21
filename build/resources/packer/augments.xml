@@ -245,8 +245,8 @@
 			<params stat="HP"  offset="1" multiplier="3" />
 		</augment>
 		<augment id="80">
-			<params stat="Mag. Acc"  offset="1" />
-			<params stat="Magic Damage "  offset="1" />
+			<params stat="Mag. Acc."  offset="1" />
+			<params stat="Magic Damage"  offset="1" />
 		</augment>
 		<augment id="81">
 			<params stat="Eva."  offset="1" />
