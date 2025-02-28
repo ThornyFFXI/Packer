@@ -1,8 +1,15 @@
 # Packer
 Packer is a plugin designed to make rearranging your gear for job changes quick and easy.<br>
 It can fetch items from an ashitacast XML, or simply organize your inventory based on it's own configuration file.<br>
-<br>
-### Commands
+
+# Installation
+Do not download the entire repository as a zip unless you plan to compile the plugin yourself. That will not provide the files you need.<br>
+
+1. Download the plugin release zip that matches your ashita installation's interface version from the releases area on the right side.
+2. Extract the entire zip to your ashita folder(the folder containing ashita.dll and ashita-cli.exe). Everything will fall into place.
+3. Load with '/load packer' or add the same line to your startup script. Packer is a plugin not an addon, so do not use '/addon load'.
+
+# Commands
 All commands can be prefixed with **/pa** or **/packer**.<br>
 Any parameter that includes a space must be enclosed in quotation marks(**"**).
 
