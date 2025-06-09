@@ -236,6 +236,12 @@ bool packer::parseProfileXml(xml_document<>* xmlDocument)
             if ((_stricmp(child->name(), "item") == 0) && (strlen(child->value()) > 0))
             {
                 IItem* pResource = m_AshitaCore->GetResourceManager()->GetItemByName(child->value(), 0);
+                if (!pResource)
+                {
+                    int itemId = atoi(child->value());
+                    if ((itemId > 0) && (itemId < 65535))
+                        pResource = m_AshitaCore->GetResourceManager()->GetItemById(itemId);
+                }
                 if (pResource)
                     iter->needed.push_back(itemOrder_t(child, pResource));
                 else
@@ -409,6 +415,12 @@ bool packer::parseAshitacastXml(xml_document<>* xmlDocument, std::list<itemOrder
                 if (_stricmp(child->name(), "item") == 0)
                 {
                     IItem* pResource = m_AshitaCore->GetResourceManager()->GetItemByName(child->value(), 0);
+                    if (!pResource)
+                    {
+                        int itemId = atoi(child->value());
+                        if ((itemId > 0) && (itemId < 65535))
+                            pResource = m_AshitaCore->GetResourceManager()->GetItemById(itemId);
+                    }
                     if (!pResource)
                     {
                         pOutput->error_f("Invalid item node found.  It will be ignored.  [Packer Section] [Node:$H%s$R] [Item:$H%s$R]", child->name(), child->value());

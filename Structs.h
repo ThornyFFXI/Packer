@@ -5,7 +5,7 @@
 #pragma once
 #endif
 
-#include "C:\Ashita 4\plugins\sdk\Ashita.h"
+#include "Ashita.h"
 #include "..\common\thirdparty\rapidxml.hpp"
 #include <chrono>
 #include <vector>
@@ -174,7 +174,7 @@ struct itemOrder_t
         }
     }
 
-    bool operator==(const itemOrder_t& other)
+    bool operator==(itemOrder_t other)
     {
         if (_stricmp(name, other.name) != 0)
             return false;

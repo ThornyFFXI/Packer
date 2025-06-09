@@ -114,20 +114,62 @@ void packer::flagMoveItems()
         }
     }
 
-    //Now, flag organize items.
+    //List of bags we will skip when iterating containers.
+    std::list<int> noItemBags = {
+        8,
+        10,
+        11,
+        12};
+
+    //Now, flag organize items that aren't all.
     for (std::list<containerInfo_t>::iterator iter = mConfig.containers.begin(); iter != mConfig.containers.end(); iter++)
     {
-        //List of bags we will skip when iterating containers.
-        std::list<int> noItemBags = {
-            8,
-            10,
-            11,
-            12};
-
         for (std::list<itemOrder_t>::iterator iOrder = iter->needed.begin(); iOrder != iter->needed.end(); iOrder++)
         {
+            if (iOrder->all)
+                continue;
+
             iOrder->quantityFound = 0;
             bool isEquip = (iOrder->resource->Flags & 0x800);
+
+            //We want to check matching bag first since they won't have to be moved, past that it doesn't really matter.
+            if (parseBag(iter->containerIndex, &(*iOrder), iter->containerIndex))
+                continue;
+
+            //Go from last bag to first so we take items out of bags we want empty.
+            for (std::list<containerInfo_t>::reverse_iterator iter2 = mConfig.containers.rbegin(); iter2 != mConfig.containers.rend(); iter2++)
+            {
+                int x = iter2->containerIndex;
+
+                //Skip matching bag, already been checked.
+                if (x == iter->containerIndex)
+                    continue;
+
+                //If we're looking for an item, skip bags that can't contain items; waste of resources.
+                if ((!isEquip) && (std::find(noItemBags.begin(), noItemBags.end(), x) != noItemBags.end()))
+                    continue;
+
+                //Skip bags we don't have access to, no point in it.
+                if (!mGear.hasContainer[x])
+                    continue;
+
+                //Parse bag to try to satisfy order.
+                if (parseBag(x, &(*iOrder), iter->containerIndex))
+                    break;
+            }
+        }
+    }
+
+    //Now, flag organize items that are all.
+    for (std::list<containerInfo_t>::iterator iter = mConfig.containers.begin(); iter != mConfig.containers.end(); iter++)
+    {
+        for (std::list<itemOrder_t>::iterator iOrder = iter->needed.begin(); iOrder != iter->needed.end(); iOrder++)
+        {
+            if (!iOrder->all)
+                continue;
+
+            iOrder->quantityFound = 0;
+            bool isEquip          = (iOrder->resource->Flags & 0x800);
 
             //We want to check matching bag first since they won't have to be moved, past that it doesn't really matter.
             if (parseBag(iter->containerIndex, &(*iOrder), iter->containerIndex))

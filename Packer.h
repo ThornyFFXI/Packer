@@ -5,11 +5,11 @@
 #pragma once
 #endif
 
-#include "C:\Ashita 4\plugins\sdk\Ashita.h"
-#include "..\common\safePacketInjector.h"
-#include "..\common\thirdparty\rapidxml.hpp"
-#include "..\common\Output.h"
-#include "..\common\Settings.h"
+#include "Ashita.h"
+#include "common\safePacketInjector.h"
+#include "common\thirdparty\rapidxml.hpp"
+#include "common\Output.h"
+#include "common\Settings.h"
 #include "constants.h"
 #include "Structs.h"
 
@@ -55,11 +55,11 @@ public:
     }
     const char* GetLink(void) const override
     {
-        return "https://github.com/Lolwutt/packer";
+        return "https://github.com/ThornyFFXI/packer";
     }
     double GetVersion(void) const override
     {
-        return 1.14f;
+        return 1.15f;
     }
     int32_t GetPriority(void) const override
     {
