@@ -1,4 +1,5 @@
 LIBRARY "packer"
 EXPORTS
 	expCreatePlugin
+	expDestroyPlugin
 	expGetInterfaceVersion
